@@ -1,0 +1,20 @@
+%PROBLEMA #1. Este problema es el más sencillo posible. El script debe abrir una ventana de psychtoolbox (que ocupe la pantalla completa). 
+%La pantalla debe de ser de color gris. Debe mantenerse activa (toda la pantalla gris) durante 5 segundos y luego debe terminar el programa.
+
+clear all;
+clearvars;
+sca
+
+PsychDefaultSetup(2);
+screens = Screen('Screens');
+screenNumber = max(screens);
+
+
+white = WhiteIndex(screenNumber);
+grey = white / 2;
+[window, windowRect] = PsychImaging('OpenWindow', screenNumber, grey);
+
+WaitSecs(5);
+sca
+
+%%PROBLEMA 2. 

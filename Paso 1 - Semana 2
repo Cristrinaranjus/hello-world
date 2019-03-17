@@ -170,3 +170,51 @@ Screen('FillRect', window, rectColor, centeredRect2)
 Screen('Flip', window);
 WaitSecs(time2);
 sca;
+
+
+%PROBLEMA 6. Después del punto de fijación debe aparecer un círculo verde a la derecha de la pantalla, y el cuadrado rojo a la izquierda de la pantalla. 
+%Ambos estímulos deben de estar alejados del centro de la pantalla 1/4 del alto de la pantalla.
+%Deben de permanecer en pantalla 2 segundos, y luego termina el ensayo.
+
+PsychDefaultSetup(2);
+screens = Screen('Screens');
+screenNumber = max(screens);
+
+pseudoal = [0.2 : 0.1 : 0.5];
+election = randperm(4);
+time1 = pseudoal (election(1));
+
+white = WhiteIndex(screenNumber);
+grey = white / 2;
+[window, windowRect] = PsychImaging('OpenWindow', screenNumber, grey);
+
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
+[xCenter, yCenter] = RectCenter(windowRect)
+
+fixCrossDimPix = 40;
+xCoords = [-fixCrossDimPix fixCrossDimPix 0 0];
+yCoords = [0 0 -fixCrossDimPix fixCrossDimPix];
+allCoords = [xCoords; yCoords];
+lineWidthPix = 4;
+Screen('DrawLines', window, allCoords, lineWidthPix, white, [xCenter, yCenter], 2);
+Screen('Flip', window)
+WaitSecs(time1);
+
+
+baseRect = [0 0 300 300];
+centeredRect = CenterRectOnPointd(baseRect, xCenter-screenYpixels/4, yCenter);
+rectColor = [1 0 0];
+Screen('FillRect', window, rectColor, centeredRect);
+
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+[xCenter, yCenter] = RectCenter(windowRect);
+baseOval= [0 0 300 300]
+maxDiameter = max(baseRect)*1.01;
+centeredRect2 = CenterRectOnPointd(baseOval, xCenter+screenYpixels/4, yCenter);
+OvalColor = [0 1 0]
+Screen('FillOval', window, OvalColor, centeredRect2, maxDiameter);
+Screen('Flip', window);
+WaitSecs(2);
+
+sca;

@@ -50,3 +50,24 @@ sca;
 
 
 %PROBLEMA 3.
+PsychDefaultSetup(2);
+screens = Screen('Screens');
+screenNumber = max(screens);
+
+
+white = WhiteIndex(screenNumber);
+grey = white / 2;
+[window, windowRect] = PsychImaging('OpenWindow', screenNumber, grey);
+
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+[xCenter, yCenter] = RectCenter(windowRect)
+baseRect = [0 0 screenXpixels/4, screenYpixels/4]
+centeredRect = CenterRectOnPointd(baseRect, xCenter, yCenter)
+rectColor = [1 0 0];
+Screen('FillRect', window, rectColor, centeredRect);
+Screen('Flip', window);
+WaitSecs(2);
+sca;
+
+
+%PROBLEMA 4.

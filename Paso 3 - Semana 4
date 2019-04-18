@@ -137,7 +137,136 @@ Los restantes 2/3 de los ensayos (ensayos congruentes) la “dot probe” aparec
 La segunda fila la podemos usar para indicar la posición del dot probe) 
 
 
+PsychDefaultSetup(2);
+screens = Screen('Screens');
+screenNumber = max(screens);
 
+n=6;
+
+white = WhiteIndex(screenNumber);
+grey = white / 2;
+
+tipo_trial= zeros (2,n);
+tipo_trial(1,1:n/2)=1; 
+tipo_trial(1,(n/2+1):end)=2;
+tipo_trial(2,1:n/3)=1
+tipo_trial(2,(n/3*2-1):end)=2;
+
+[window, windowRect] = PsychImaging('OpenWindow', screenNumber, grey);
+
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
+[xCenter, yCenter] = RectCenter(windowRect)
+
+for i = 1:n
+    time=0.250;
+    timedot=1.750;
+    timefix= 0.2+(0.5-0.2).*rand;
+fixCrossDimPix = 40;
+xCoords = [-fixCrossDimPix fixCrossDimPix 0 0];
+yCoords = [0 0 -fixCrossDimPix fixCrossDimPix];
+allCoords = [xCoords; yCoords];
+lineWidthPix = 4;
+Screen('DrawLines', window, allCoords, lineWidthPix, white, [xCenter, yCenter], 2);
+Screen('Flip', window)
+WaitSecs(timefix);
+
+%%Estímulos sin "dot probe"
+if tipo_trial(1,i) == 1;
+baseRect = [0 0 300 300];
+centeredRect = CenterRectOnPointd(baseRect, xCenter-screenYpixels/4, yCenter);
+rectColor = [1 0 0];
+Screen('FillRect', window, rectColor, centeredRect);
+
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+[xCenter, yCenter] = RectCenter(windowRect);
+baseOval= [0 0 300 300]
+maxDiameter = max(baseRect)*1.01;
+centeredRect2 = CenterRectOnPointd(baseOval, xCenter+screenYpixels/4, yCenter);
+OvalColor = [0 1 0]
+Screen('FillOval', window, OvalColor, centeredRect2, maxDiameter);
+Screen('Flip', window);
+WaitSecs(time);
+
+elseif tipo_trial(1,i)==2;
+    baseRect = [0 0 300 300];
+centeredRect = CenterRectOnPointd(baseRect, xCenter+screenYpixels/4, yCenter);
+rectColor = [1 0 0];
+Screen('FillRect', window, rectColor, centeredRect);
+
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+[xCenter, yCenter] = RectCenter(windowRect);
+baseOval= [0 0 300 300]
+maxDiameter = max(baseRect)*1.01;
+centeredRect2 = CenterRectOnPointd(baseOval, xCenter-screenYpixels/4, yCenter);
+OvalColor = [0 1 0]
+Screen('FillOval', window, OvalColor, centeredRect2, maxDiameter);
+Screen('Flip', window);
+WaitSecs(time);
+end;
+
+%%Estímulos con "dot probe"
+if tipo_trial(1,i) == 1;
+baseRect = [0 0 300 300];
+centeredRect = CenterRectOnPointd(baseRect, xCenter-screenYpixels/4, yCenter);
+rectColor = [1 0 0];
+Screen('FillRect', window, rectColor, centeredRect);
+
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+[xCenter, yCenter] = RectCenter(windowRect);
+baseOval= [0 0 300 300]
+maxDiameter = max(baseRect)*1.01;
+centeredRect2 = CenterRectOnPointd(baseOval, xCenter+screenYpixels/4, yCenter);
+OvalColor = [0 1 0]
+Screen('FillOval', window, OvalColor, centeredRect2, maxDiameter);
+Screen('Flip', window);
+    if tipo_trial(2,i) == 1
+    baseRect = [0 0 50 50];
+    centeredRect = CenterRectOnPointd(baseRect, xCenter+screenYpixels/4, yCenter);
+    rectColor = [255 255 255];
+    Screen('FillRect', window, rectColor, centeredRect);
+    elseif tipo_trial (2,i) == 2
+    baseRect = [0 0 50 50];
+    centeredRect = CenterRectOnPointd(baseRect, xCenter-screenYpixels/4, yCenter);
+    rectColor = [255 255 255];
+    Screen('FillRect', window, rectColor, centeredRect);
+    end
+Screen('Flip', wPtr);
+WaitSecs(timedot);
+
+elseif tipo_trial(1,i)==2;
+baseRect = [0 0 300 300];
+centeredRect = CenterRectOnPointd(baseRect, xCenter+screenYpixels/4, yCenter);
+rectColor = [1 0 0];
+Screen('FillRect', window, rectColor, centeredRect);
+
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+[xCenter, yCenter] = RectCenter(windowRect);
+baseOval= [0 0 300 300]
+maxDiameter = max(baseRect)*1.01;
+centeredRect2 = CenterRectOnPointd(baseOval, xCenter-screenYpixels/4, yCenter);
+OvalColor = [0 1 0]
+Screen('FillOval', window, OvalColor, centeredRect2, maxDiameter);
+Screen('Flip', window);
+    if tipo_trial (2,i) == 1
+        baseRect = [0 0 50 50];
+        centeredRect = CenterRectOnPointd(baseRect, xCenter+screenYpixels/4, yCenter);
+        rectColor = [255 255 255];
+        Screen('FillRect', window, rectColor, centeredRect);
+    elseif tipo_trial (2,i) == 2
+        baseRect = [0 0 50 50];
+        centeredRect = CenterRectOnPointd(baseRect, xCenter-screenYpixels/4, yCenter);
+        rectColor = [255 255 255];
+        Screen('FillRect', window, rectColor, centeredRect);
+    end
+Screen ('Flip', wPtr); WaitSecs(timedot);
+end;
+
+Screen('FillRect', window, grey);
+Screen('Flip', window);
+WaitSecs(0.5);
+end;
+sca;
 
 
 PROBLEMA #12: 

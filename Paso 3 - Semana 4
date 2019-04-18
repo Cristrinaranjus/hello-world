@@ -276,10 +276,337 @@ el participante tendrá que pulsar una flecha del teclado para poder seguir con 
 ¡No vale una flecha cualquiera! Tiene que pulsar la flecha con la misma dirección que la posición de la dot probe. 
 Es decir, si la dot probe está a la izquierda, hay que pulsar la tecla (ß) para pasar a la siguiente pantalla. 
 
+PsychDefaultSetup(2);
+screens = Screen('Screens');
+screenNumber = max(screens);
 
+n=6;
+ListenChar(2);
+[KeyIsDown, endrt, KeyCode]=KbCheck;
+white = WhiteIndex(screenNumber);
+grey = white / 2;
+
+tipo_trial= zeros (2,n);
+tipo_trial(1,1:n/2)=1; 
+tipo_trial(1,(n/2+1):end)=2;
+tipo_trial(2,1:n/3)=1
+tipo_trial(2,(n/3*2-1):end)=2;
+
+KbName('UnifyKeyNames');
+right_key=KbName('RightArrow');
+left_key=KbName('LeftArrow');
+[window, windowRect] = PsychImaging('OpenWindow', screenNumber, grey);
+
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
+[xCenter, yCenter] = RectCenter(windowRect)
+
+for i = 1:n
+    time=0.250;
+    timedot=1.750;
+    timefix= 0.2+(0.5-0.2).*rand;
+fixCrossDimPix = 40;
+xCoords = [-fixCrossDimPix fixCrossDimPix 0 0];
+yCoords = [0 0 -fixCrossDimPix fixCrossDimPix];
+allCoords = [xCoords; yCoords];
+lineWidthPix = 4;
+Screen('DrawLines', window, allCoords, lineWidthPix, white, [xCenter, yCenter], 2);
+Screen('Flip', window)
+WaitSecs(timefix);
+
+%%Estímulos sin "dot probe"
+if tipo_trial(1,i) == 1;
+baseRect = [0 0 300 300];
+centeredRect = CenterRectOnPointd(baseRect, xCenter-screenYpixels/4, yCenter);
+rectColor = [1 0 0];
+Screen('FillRect', window, rectColor, centeredRect);
+
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+[xCenter, yCenter] = RectCenter(windowRect);
+baseOval= [0 0 300 300]
+maxDiameter = max(baseRect)*1.01;
+centeredRect2 = CenterRectOnPointd(baseOval, xCenter+screenYpixels/4, yCenter);
+OvalColor = [0 1 0]
+Screen('FillOval', window, OvalColor, centeredRect2, maxDiameter);
+Screen('Flip', window);
+WaitSecs(time);
+
+elseif tipo_trial(1,i)==2;
+    baseRect = [0 0 300 300];
+centeredRect = CenterRectOnPointd(baseRect, xCenter+screenYpixels/4, yCenter);
+rectColor = [1 0 0];
+Screen('FillRect', window, rectColor, centeredRect);
+
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+[xCenter, yCenter] = RectCenter(windowRect);
+baseOval= [0 0 300 300]
+maxDiameter = max(baseRect)*1.01;
+centeredRect2 = CenterRectOnPointd(baseOval, xCenter-screenYpixels/4, yCenter);
+OvalColor = [0 1 0]
+Screen('FillOval', window, OvalColor, centeredRect2, maxDiameter);
+Screen('Flip', window);
+WaitSecs(time);
+end;
+
+%%Estímulos con "dot probe"
+if tipo_trial(1,i) == 1;
+baseRect = [0 0 300 300];
+centeredRect = CenterRectOnPointd(baseRect, xCenter-screenYpixels/4, yCenter);
+rectColor = [1 0 0];
+Screen('FillRect', window, rectColor, centeredRect);
+
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+[xCenter, yCenter] = RectCenter(windowRect);
+baseOval= [0 0 300 300]
+maxDiameter = max(baseRect)*1.01;
+centeredRect2 = CenterRectOnPointd(baseOval, xCenter+screenYpixels/4, yCenter);
+OvalColor = [0 1 0]
+Screen('FillOval', window, OvalColor, centeredRect2, maxDiameter);
+Screen('Flip', window);
+    if tipo_trial(2,i) == 1
+    baseRect = [0 0 50 50];
+    centeredRect = CenterRectOnPointd(baseRect, xCenter+screenYpixels/4, yCenter);
+    rectColor = [255 255 255];
+    Screen('FillRect', window, rectColor, centeredRect);
+    elseif tipo_trial (2,i) == 2
+    baseRect = [0 0 50 50];
+    centeredRect = CenterRectOnPointd(baseRect, xCenter-screenYpixels/4, yCenter);
+    rectColor = [255 255 255];
+    Screen('FillRect', window, rectColor, centeredRect);
+    end
+Screen('Flip', wPtr);
+WaitSecs(timedot);
+
+ FlushEvents;
+   if tipo_trial(1,i)== tipo_trial (2,i);
+        while KeyCode (right_key)==0
+        [KeyIsDown, endrt, KeyCode]=KbCheck;
+        WaitSecs(0.1);
+        end
+   elseif tipo_trial(1,i)~= tipo_trial (2,i);
+        while KeyCode (left_key)==0
+        [KeyIsDown, endrt, KeyCode]=KbCheck;
+        WaitSecs(0.1);
+        end
+        FlushEvents; 
+   end
+
+elseif tipo_trial(1,i)==2;
+baseRect = [0 0 300 300];
+centeredRect = CenterRectOnPointd(baseRect, xCenter+screenYpixels/4, yCenter);
+rectColor = [1 0 0];
+Screen('FillRect', window, rectColor, centeredRect);
+
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+[xCenter, yCenter] = RectCenter(windowRect);
+baseOval= [0 0 300 300]
+maxDiameter = max(baseRect)*1.01;
+centeredRect2 = CenterRectOnPointd(baseOval, xCenter-screenYpixels/4, yCenter);
+OvalColor = [0 1 0]
+Screen('FillOval', window, OvalColor, centeredRect2, maxDiameter);
+Screen('Flip', window);
+    if tipo_trial (2,i) == 1
+        baseRect = [0 0 50 50];
+        centeredRect = CenterRectOnPointd(baseRect, xCenter+screenYpixels/4, yCenter);
+        rectColor = [255 255 255];
+        Screen('FillRect', window, rectColor, centeredRect);
+    elseif tipo_trial (2,i) == 2
+        baseRect = [0 0 50 50];
+        centeredRect = CenterRectOnPointd(baseRect, xCenter-screenYpixels/4, yCenter);
+        rectColor = [255 255 255];
+        Screen('FillRect', window, rectColor, centeredRect);
+    end
+Screen ('Flip', wPtr); WaitSecs(timedot);
+FlushEvents;
+   if tipo_trial(1,i)== tipo_trial (2,i);
+        while KeyCode (right_key)==0
+        [KeyIsDown, endrt, KeyCode]=KbCheck;
+        WaitSecs(0.1);
+        end
+   elseif tipo_trial(1,i)~= tipo_trial (2,i);
+        while KeyCode (left_key)==0
+        [KeyIsDown, endrt, KeyCode]=KbCheck;
+        WaitSecs(0.1);
+        end
+        FlushEvents;
+   end
+end;
+
+Screen('FillRect', window, grey);
+Screen('Flip', window);
+WaitSecs(0.5);
+end;
+sca;
 
 
 PROBLEMA #13: 
 Haz que el orden de los ensayos sea aleatorio. 
 (TIP: Puedes “desordenar” las columnas de la matriz tipo_trial una vez que esté creada usando “randperm”).
 
+PsychDefaultSetup(2);
+screens = Screen('Screens');
+screenNumber = max(screens);
+
+n=6;
+ListenChar(2);
+[KeyIsDown, endrt, KeyCode]=KbCheck;
+white = WhiteIndex(screenNumber);
+grey = white / 2;
+
+tipo_trial= zeros (2,n);
+tipo_trial(1,1:n/2)=1; 
+tipo_trial(1,(n/2+1):end)=2;
+tipo_trial(2,1:n/3)=1
+tipo_trial(2,(n/3*2-1):end)=2;
+
+random_order = randperm(n);
+tipo_trial(1,:)= tipo_trial(1,random_order);
+tipo_trial(2,:)= tipo_trial(2,random_order);
+
+KbName('UnifyKeyNames');
+right_key=KbName('RightArrow');
+left_key=KbName('LeftArrow');
+[window, windowRect] = PsychImaging('OpenWindow', screenNumber, grey);
+
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
+[xCenter, yCenter] = RectCenter(windowRect)
+
+for i = 1:n
+    time=0.250;
+    timedot=1.750;
+    timefix= 0.2+(0.5-0.2).*rand;
+fixCrossDimPix = 40;
+xCoords = [-fixCrossDimPix fixCrossDimPix 0 0];
+yCoords = [0 0 -fixCrossDimPix fixCrossDimPix];
+allCoords = [xCoords; yCoords];
+lineWidthPix = 4;
+Screen('DrawLines', window, allCoords, lineWidthPix, white, [xCenter, yCenter], 2);
+Screen('Flip', window)
+WaitSecs(timefix);
+
+%%Estímulos sin "dot probe"
+if tipo_trial(1,i) == 1;
+baseRect = [0 0 300 300];
+centeredRect = CenterRectOnPointd(baseRect, xCenter-screenYpixels/4, yCenter);
+rectColor = [1 0 0];
+Screen('FillRect', window, rectColor, centeredRect);
+
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+[xCenter, yCenter] = RectCenter(windowRect);
+baseOval= [0 0 300 300]
+maxDiameter = max(baseRect)*1.01;
+centeredRect2 = CenterRectOnPointd(baseOval, xCenter+screenYpixels/4, yCenter);
+OvalColor = [0 1 0]
+Screen('FillOval', window, OvalColor, centeredRect2, maxDiameter);
+Screen('Flip', window);
+WaitSecs(time);
+
+elseif tipo_trial(1,i)==2;
+    baseRect = [0 0 300 300];
+centeredRect = CenterRectOnPointd(baseRect, xCenter+screenYpixels/4, yCenter);
+rectColor = [1 0 0];
+Screen('FillRect', window, rectColor, centeredRect);
+
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+[xCenter, yCenter] = RectCenter(windowRect);
+baseOval= [0 0 300 300]
+maxDiameter = max(baseRect)*1.01;
+centeredRect2 = CenterRectOnPointd(baseOval, xCenter-screenYpixels/4, yCenter);
+OvalColor = [0 1 0]
+Screen('FillOval', window, OvalColor, centeredRect2, maxDiameter);
+Screen('Flip', window);
+WaitSecs(time);
+end;
+
+%%Estímulos con "dot probe"
+if tipo_trial(1,i) == 1;
+baseRect = [0 0 300 300];
+centeredRect = CenterRectOnPointd(baseRect, xCenter-screenYpixels/4, yCenter);
+rectColor = [1 0 0];
+Screen('FillRect', window, rectColor, centeredRect);
+
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+[xCenter, yCenter] = RectCenter(windowRect);
+baseOval= [0 0 300 300]
+maxDiameter = max(baseRect)*1.01;
+centeredRect2 = CenterRectOnPointd(baseOval, xCenter+screenYpixels/4, yCenter);
+OvalColor = [0 1 0]
+Screen('FillOval', window, OvalColor, centeredRect2, maxDiameter);
+Screen('Flip', window);
+    if tipo_trial(2,i) == 1
+    baseRect = [0 0 50 50];
+    centeredRect = CenterRectOnPointd(baseRect, xCenter+screenYpixels/4, yCenter);
+    rectColor = [255 255 255];
+    Screen('FillRect', window, rectColor, centeredRect);
+    elseif tipo_trial (2,i) == 2
+    baseRect = [0 0 50 50];
+    centeredRect = CenterRectOnPointd(baseRect, xCenter-screenYpixels/4, yCenter);
+    rectColor = [255 255 255];
+    Screen('FillRect', window, rectColor, centeredRect);
+    end
+Screen('Flip', window);
+WaitSecs(timedot);
+
+ FlushEvents;
+   if tipo_trial(1,i)== tipo_trial (2,i);
+        while KeyCode (right_key)==0
+        [KeyIsDown, endrt, KeyCode]=KbCheck;
+        WaitSecs(0.1);
+        end
+   elseif tipo_trial(1,i)~= tipo_trial (2,i);
+        while KeyCode (left_key)==0
+        [KeyIsDown, endrt, KeyCode]=KbCheck;
+        WaitSecs(0.1);
+        end
+        FlushEvents; 
+   end
+KeyCode (right_key)=0; KeyCode (left_key)=0;
+
+elseif tipo_trial(1,i)==2;
+baseRect = [0 0 300 300];
+centeredRect = CenterRectOnPointd(baseRect, xCenter+screenYpixels/4, yCenter);
+rectColor = [1 0 0];
+Screen('FillRect', window, rectColor, centeredRect);
+
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+[xCenter, yCenter] = RectCenter(windowRect);
+baseOval= [0 0 300 300]
+maxDiameter = max(baseRect)*1.01;
+centeredRect2 = CenterRectOnPointd(baseOval, xCenter-screenYpixels/4, yCenter);
+OvalColor = [0 1 0]
+Screen('FillOval', window, OvalColor, centeredRect2, maxDiameter);
+Screen('Flip', window);
+    if tipo_trial (2,i) == 1
+        baseRect = [0 0 50 50];
+        centeredRect = CenterRectOnPointd(baseRect, xCenter+screenYpixels/4, yCenter);
+        rectColor = [255 255 255];
+        Screen('FillRect', window, rectColor, centeredRect);
+    elseif tipo_trial (2,i) == 2
+        baseRect = [0 0 50 50];
+        centeredRect = CenterRectOnPointd(baseRect, xCenter-screenYpixels/4, yCenter);
+        rectColor = [255 255 255];
+        Screen('FillRect', window, rectColor, centeredRect);
+    end
+Screen ('Flip', window); WaitSecs(timedot);
+FlushEvents;
+   if tipo_trial(1,i)== tipo_trial (2,i);
+        while KeyCode (right_key)==0
+        [KeyIsDown, endrt, KeyCode]=KbCheck;
+        WaitSecs(0.1);
+        end
+   elseif tipo_trial(1,i)~= tipo_trial (2,i);
+        while KeyCode (left_key)==0
+        [KeyIsDown, endrt, KeyCode]=KbCheck;
+        WaitSecs(0.1);
+        end
+        
+   end
+   KeyCode (right_key)=0; KeyCode (left_key)=0;
+end;
+
+Screen('FillRect', window, grey);
+Screen('Flip', window);
+WaitSecs(0.5);
+end;
+sca;

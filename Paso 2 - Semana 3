@@ -1,1 +1,205 @@
+%% PROBLEMAS RELACIONADOS CON 
+(1) CREAR UN "LOOP" QUE SE REPITE (CADA ITERACIÓN DEL LOOP SERÁ UN ENSAYO) Y 
+(2) USAR EL if PARA ESTABLECER QUÉ PASA EN CADA ENSAYO MEDIANTE UNA VARIABLE:
+
+PROBLEMA #7. Añade una pantalla vacía (fondo gris) que seguiría a la presentación de los estímulos durante 0.5 segundos. 
+La secuencia ahora debe ser: Cruz de fijación-->Estímulos-->Pantalla vacía. Esta secuencia la llamaremos "ensayo".
+
+PsychDefaultSetup(2);
+screens = Screen('Screens');
+screenNumber = max(screens);
+
+pseudoal = [0.2 : 0.1 : 0.5];
+election = randperm(4);
+time1 = pseudoal (election(1));
+
+white = WhiteIndex(screenNumber);
+grey = white / 2;
+[window, windowRect] = PsychImaging('OpenWindow', screenNumber, grey);
+
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
+[xCenter, yCenter] = RectCenter(windowRect)
+
+fixCrossDimPix = 40;
+xCoords = [-fixCrossDimPix fixCrossDimPix 0 0];
+yCoords = [0 0 -fixCrossDimPix fixCrossDimPix];
+allCoords = [xCoords; yCoords];
+lineWidthPix = 4;
+Screen('DrawLines', window, allCoords, lineWidthPix, white, [xCenter, yCenter], 2);
+Screen('Flip', window)
+WaitSecs(time1);
+
+
+baseRect = [0 0 300 300];
+centeredRect = CenterRectOnPointd(baseRect, xCenter-screenYpixels/4, yCenter);
+rectColor = [1 0 0];
+Screen('FillRect', window, rectColor, centeredRect);
+
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+[xCenter, yCenter] = RectCenter(windowRect);
+baseOval= [0 0 300 300]
+maxDiameter = max(baseRect)*1.01;
+centeredRect2 = CenterRectOnPointd(baseOval, xCenter+screenYpixels/4, yCenter);
+OvalColor = [0 1 0]
+Screen('FillOval', window, OvalColor, centeredRect2, maxDiameter);
+Screen('Flip', window);
+WaitSecs(2);
+
+Screen('FillRect', window, grey);
+Screen('Flip', window);
+WaitSecs(0.5);
+sca;
+
+
+
+
+PROBLEMA #8. Haz que se repitan 6 ensayos. No copies y peges el código de un ensayo 6 veces! 
+(TIP: Usa un loop n = numero de ensayos 
+>for i= 1:n 
+>% el ensayo pasa aqui 
+>end )
+
+PsychDefaultSetup(2);
+screens = Screen('Screens');
+screenNumber = max(screens);
+
+pseudoal = [0.2 : 0.1 : 0.5];
+election = randperm(4);
+time1 = pseudoal (election(1));
+
+white = WhiteIndex(screenNumber);
+grey = white / 2;
+n=6;
+[window, windowRect] = PsychImaging('OpenWindow', screenNumber, grey);
+
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
+[xCenter, yCenter] = RectCenter(windowRect)
+
+for i = 1:n
+fixCrossDimPix = 40;
+xCoords = [-fixCrossDimPix fixCrossDimPix 0 0];
+yCoords = [0 0 -fixCrossDimPix fixCrossDimPix];
+allCoords = [xCoords; yCoords];
+lineWidthPix = 4;
+Screen('DrawLines', window, allCoords, lineWidthPix, white, [xCenter, yCenter], 2);
+Screen('Flip', window)
+WaitSecs(time1);
+
+
+baseRect = [0 0 300 300];
+centeredRect = CenterRectOnPointd(baseRect, xCenter-screenYpixels/4, yCenter);
+rectColor = [1 0 0];
+Screen('FillRect', window, rectColor, centeredRect);
+
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+[xCenter, yCenter] = RectCenter(windowRect);
+baseOval= [0 0 300 300]
+maxDiameter = max(baseRect)*1.01;
+centeredRect2 = CenterRectOnPointd(baseOval, xCenter+screenYpixels/4, yCenter);
+OvalColor = [0 1 0]
+Screen('FillOval', window, OvalColor, centeredRect2, maxDiameter);
+Screen('Flip', window);
+WaitSecs(2);
+
+Screen('FillRect', window, grey);
+Screen('Flip', window);
+WaitSecs(0.5);
+end;
+sca;
+
+
+
+
+
+PROBLEMA #9: Cambia el código de modo que en la mitad de los ensayos el cuadrado esté a la izquierda
+y el circulo a la derecha, y en la otra mitad al contrario.
+(TIP: Crea una variable [por ejemplo <tipo_trial>].
+Esta variable debe contener tantos elementos (columnas) como número de ensayos.
+Por ahora tendrá solo una fila.
+
+> tipo_trial = zeros (1,n);%la creamos llena de zeros
+
+Ahora haz que la mitad de los valores de tipo_trial sean un 1 y la otra mitad un 2. Luego, 
+cuando tengas que "dibujar" tus estímulos en el loop, solo tienes que indicar que
+
+> if tipo_trial (1,i) == 1
+% aquí pones el código para que la posición de los estímulos sea cuadrado a la izquierda/circulo a la derecha.
+> elseif tipo_trial (1,i) == 2
+% aquí pones el código para que la posición de los estímulos sea círculo a la izquierda/cuadrado a la derecha.
+>end
+
+PsychDefaultSetup(2);
+screens = Screen('Screens');
+screenNumber = max(screens);
+
+pseudoal = [0.2 : 0.1 : 0.5];
+election = randperm(4);
+time1 = pseudoal (election(1));
+
+white = WhiteIndex(screenNumber);
+grey = white / 2;
+n=6;
+tipo_trial= zeros (1,n);
+tipo_trial(1,1:n/2)=1; 
+tipo_trial(1,(n/2+1):end)=2;
+
+[window, windowRect] = PsychImaging('OpenWindow', screenNumber, grey);
+
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
+[xCenter, yCenter] = RectCenter(windowRect)
+
+for i = 1:n
+fixCrossDimPix = 40;
+xCoords = [-fixCrossDimPix fixCrossDimPix 0 0];
+yCoords = [0 0 -fixCrossDimPix fixCrossDimPix];
+allCoords = [xCoords; yCoords];
+lineWidthPix = 4;
+Screen('DrawLines', window, allCoords, lineWidthPix, white, [xCenter, yCenter], 2);
+Screen('Flip', window)
+WaitSecs(time1);
+
+if tipo_trial(1,i) == 1;
+baseRect = [0 0 300 300];
+centeredRect = CenterRectOnPointd(baseRect, xCenter-screenYpixels/4, yCenter);
+rectColor = [1 0 0];
+Screen('FillRect', window, rectColor, centeredRect);
+
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+[xCenter, yCenter] = RectCenter(windowRect);
+baseOval= [0 0 300 300]
+maxDiameter = max(baseRect)*1.01;
+centeredRect2 = CenterRectOnPointd(baseOval, xCenter+screenYpixels/4, yCenter);
+OvalColor = [0 1 0]
+Screen('FillOval', window, OvalColor, centeredRect2, maxDiameter);
+Screen('Flip', window);
+WaitSecs(2);
+Screen('FillRect', window, grey);
+Screen('Flip', window);
+WaitSecs(0.5);
+end
+
+if tipo_trial(1,i)==2;
+    baseRect = [0 0 300 300];
+centeredRect = CenterRectOnPointd(baseRect, xCenter+screenYpixels/4, yCenter);
+rectColor = [1 0 0];
+Screen('FillRect', window, rectColor, centeredRect);
+
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+[xCenter, yCenter] = RectCenter(windowRect);
+baseOval= [0 0 300 300]
+maxDiameter = max(baseRect)*1.01;
+centeredRect2 = CenterRectOnPointd(baseOval, xCenter-screenYpixels/4, yCenter);
+OvalColor = [0 1 0]
+Screen('FillOval', window, OvalColor, centeredRect2, maxDiameter);
+Screen('Flip', window);
+WaitSecs(2);
+Screen('FillRect', window, grey);
+Screen('Flip', window);
+WaitSecs(0.5);
+end;
+end;
+sca;
 

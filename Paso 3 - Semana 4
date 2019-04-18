@@ -1,0 +1,36 @@
+PROBLEMA #10: 
+Vamos a poner el “dot” en nuestra “dot probe”. 
+Programa un pequeño cuadrado blanco (50 pixeles de lado) que aparezca en el centro de nuestro cuadrado cuando los estímulos 
+lleven en la pantalla 250 ms. Este cuadrado blanco es el “dot probe”. Es decir, cada ensayo sería ahora: 
+Cruz de fijación-->Estímulos(250 ms) --> Estímulos + “dot probe” (1750 ms) -->Pantalla vacía
+(TIP: Para presentar los Estímulos + “dot probe” tendrás que dibujar todos los estímulos de nuevo, 
+y añadir el código para dibujar el "dot probe".) 
+
+
+
+
+PROBLEMA #11: 
+En este problema vamos a crear ensayos congruentes y otros incongruentes.
+Haz que el “dot probe” aparezca en el centro del círculo 1/3 de los ensayos (ensayos incongruentes). 
+Los restantes 2/3 de los ensayos (ensayos congruentes) la “dot probe” aparecerá en el centro del cuadrado (como en el problema #10). 
+(TIP: Añade una fila más a <tipo_trial>. La primera fila seguirá sirviendo para indicar la posición de los estímulos (cuadrado y círculo). 
+La segunda fila la podemos usar para indicar la posición del dot probe) 
+
+
+
+
+
+PROBLEMA #12: 
+Cambia la duración de los estímulos en pantalla. 
+A partir de ahora, cuando estén en la pantalla los estímulos más la dot probe, 
+el participante tendrá que pulsar una flecha del teclado para poder seguir con el experimento.
+¡No vale una flecha cualquiera! Tiene que pulsar la flecha con la misma dirección que la posición de la dot probe. 
+Es decir, si la dot probe está a la izquierda, hay que pulsar la tecla (ß) para pasar a la siguiente pantalla. 
+
+
+
+
+PROBLEMA #13: 
+Haz que el orden de los ensayos sea aleatorio. 
+(TIP: Puedes “desordenar” las columnas de la matriz tipo_trial una vez que esté creada usando “randperm”).
+
